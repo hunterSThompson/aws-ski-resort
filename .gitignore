@@ -2,6 +2,9 @@
 # Project specific excludes
 #
 
+# Project config file
+conf.txt
+
 tomcat
 
 #
