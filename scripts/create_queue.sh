@@ -6,6 +6,7 @@ set -x
 queue_name=queue-1
 
 # Create the queue
-queue_url=$(aws sqs create-queue --queue-name $queue_name --query "QueueUrl" --output_text)
+# todo: Fix this. Doesn't provide correct URL
+queue_url=$(aws sqs create-queue --queue-name $queue_name --query "QueueUrl" --output text)
 
 # Export queue URL to environment variable
