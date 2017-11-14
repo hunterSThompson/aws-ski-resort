@@ -1,7 +1,8 @@
 package org.geobricks.rest;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
@@ -15,13 +16,20 @@ import org.springframework.stereotype.Component;
 public class QueueService {
 
     private AmazonSQS _sqs;
-    private String _queueDns;
+    //private String _queueDns = "https://us-east-2.queue.amazonaws.com/771905060175/queue-1";
+    private String _queueDns = "https://sqs.us-east-2.amazonaws.com/771905060175/queue-1";
     private Gson _gson;
 
+    private final String accessKey = "AKIAIIZQOBEAHOAEPPOA";
+    private final String secretyKey = "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";
+
     public QueueService() {
+        /*
         Config config = Config.getInstance();
         _queueDns = config.queueDns;
+        */
         _sqs = initializeSqs();
+        _gson = new Gson();
     }
 
     public void sendMessage(QueueMessage message) throws AmazonClientException {
@@ -31,19 +39,11 @@ public class QueueService {
     }
 
     private AmazonSQS initializeSqs() {
-        ProfileCredentialsProvider credentialsProvider = new ProfileCredentialsProvider();
-        try {
-            credentialsProvider.getCredentials();
-        } catch (Exception e) {
-            throw new AmazonClientException(
-                    "Cannot load the credentials from the credential profiles file. " +
-                            "Please make sure that your credentials file is at the correct " +
-                            "location (~/.aws/credentials), and is in valid format.",
-                    e);
-        }
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretyKey);
+        AWSStaticCredentialsProvider provider = new AWSStaticCredentialsProvider(awsCredentials);
 
         return AmazonSQSClientBuilder.standard()
-                .withCredentials(credentialsProvider)
+                .withCredentials(provider)
                 .withRegion(Regions.US_EAST_2)
                 .build();
     }

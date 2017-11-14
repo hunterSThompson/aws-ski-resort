@@ -1,7 +1,6 @@
 package org.geobricks.core;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -26,7 +25,6 @@ public class Config {
 
     private void readFile() {
 
-        FileOutputStream output;
         Properties prop = new Properties();
 
         try {
