@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 public class TestHelloWorldCore extends TestCase {
 
+    /*
     private HelloWorldCore c;
 
     @Override
@@ -19,5 +20,5 @@ public class TestHelloWorldCore extends TestCase {
     public void testSayHelloJSON() {
         assertEquals(c.sayHelloJSON("Guido"), "{\"hello\":\"Guido\"}");
     }
-
+*/
 }

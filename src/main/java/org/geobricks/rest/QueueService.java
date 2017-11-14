@@ -8,14 +8,7 @@ import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.google.gson.Gson;
 import org.geobricks.core.Config;
-import org.geobricks.core.HelloWorldCore;
-import org.geobricks.core.Utils;
 import org.springframework.stereotype.Component;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.lang.reflect.Type;
 
 //todo: set this up with DI container.
 @Component

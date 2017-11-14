@@ -2,16 +2,14 @@ package org.geobricks.rest;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.MediaType;
-import org.geobricks.core.HelloWorldCore;
-import org.geobricks.core.Utils;
+
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @Path("/hello")
-public class HelloWorldREST {
+public class SkiService {
 
     private QueueService _queueService = new QueueService();
 
