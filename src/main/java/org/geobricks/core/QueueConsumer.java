@@ -1,12 +1,7 @@
 package org.geobricks.core;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
-import com.amazonaws.services.sqs.model.*;
+import org.geobricks.rest.QueueMessage;
+import org.geobricks.rest.QueueService;
 
 import java.util.List;
 
@@ -17,7 +12,14 @@ public class QueueConsumer {
         Config config = Config.getInstance();
         String queueDns = config.queueDns;
 
+        QueueService queueService = new QueueService();
+        for (;;) {
+            List<QueueMessage> messages = queueService.getMessages();
+            // do stuff with messages
+        }
+
         // Create credential provider
+        /*
         ProfileCredentialsProvider credentialsProvider = new ProfileCredentialsProvider();
         try {
             credentialsProvider.getCredentials();
@@ -43,7 +45,6 @@ public class QueueConsumer {
             for (Message message : messages) {
                 String body = message.getBody();
                 String receiptHandle = message.getReceiptHandle();
-                /* Do things with message... */
                 sqs.deleteMessage(new DeleteMessageRequest(queueDns, receiptHandle));
             }
 
@@ -61,6 +62,7 @@ public class QueueConsumer {
                     "being able to access the network.");
             System.out.println("Error Message: " + ace.getMessage());
         }
+        */
     }
 }
 

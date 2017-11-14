@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @Path("/hello")
-public class SkiService {
+public class SkiRestEndpoint {
 
     private QueueService _queueService = new QueueService();
 

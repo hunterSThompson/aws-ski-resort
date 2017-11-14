@@ -6,17 +6,22 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
+import com.amazonaws.services.sqs.model.DeleteMessageRequest;
+import com.amazonaws.services.sqs.model.Message;
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.google.gson.Gson;
 import org.geobricks.core.Config;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //todo: set this up with DI container.
 @Component
 public class QueueService {
 
     private AmazonSQS _sqs;
-    //private String _queueDns = "https://us-east-2.queue.amazonaws.com/771905060175/queue-1";
     private String _queueDns = "https://sqs.us-east-2.amazonaws.com/771905060175/queue-1";
     private Gson _gson;
 
@@ -36,6 +41,39 @@ public class QueueService {
         String serializedMessage = _gson.toJson(message, QueueMessage.class);
         SendMessageRequest sendRequest = new SendMessageRequest(_queueDns, serializedMessage);
         _sqs.sendMessage(sendRequest);
+    }
+
+    public <T> void sendMessage(T message) throws AmazonClientException {
+        String serializedMessage = _gson.toJson(message, message.getClass());
+        SendMessageRequest sendRequest = new SendMessageRequest(_queueDns, serializedMessage);
+        _sqs.sendMessage(sendRequest);
+    }
+
+    public void deleteMessage(String receiptHandle) {
+    }
+
+    public List<QueueMessage> getMessages() {
+
+        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(_queueDns);
+        List<Message> messages = _sqs.receiveMessage(receiveMessageRequest).getMessages();
+
+        List<QueueMessage> deserializedMessages = new ArrayList<>();
+
+        for (Message message : messages) {
+            String body = message.getBody();
+            QueueMessage qm = _gson.fromJson(body, QueueMessage.class);
+            deserializedMessages.add(qm);
+
+            System.out.println("query time: " + qm.queryExecutionTime);
+            System.out.println("exec time: " + qm.totalExecutionTime);
+            System.out.println("Has ex: " + qm.hasException);
+            System.out.println("ex message: " + qm.exceptionMessage + "\n");
+
+            String receiptHandle = message.getReceiptHandle();
+            _sqs.deleteMessage(new DeleteMessageRequest(_queueDns, receiptHandle));
+        }
+
+        return deserializedMessages;
     }
 
     private AmazonSQS initializeSqs() {
